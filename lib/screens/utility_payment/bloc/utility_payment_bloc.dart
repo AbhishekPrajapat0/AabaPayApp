@@ -20,9 +20,12 @@ class UtilityPaymentBloc
       await utilityPaymentApi.paymentCreate().then((value) {
         List<Purpose> purposes = List<Purpose>.from(
             value['purposes'].map((model) => Purpose.fromJson(model))).toList();
+
         List<Priority> priorities = List<Priority>.from(
                 value['priorities'].map((model) => Priority.fromJson(model)))
             .toList();
+        print("----->  ${priorities[0].name}");
+
         Beneficiary beneficiary = Beneficiary(
           id: 0,
           user_id: 0,

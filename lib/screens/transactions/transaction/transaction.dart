@@ -15,6 +15,7 @@ import 'package:aabapay_app/constants/app_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:intl/intl.dart';
 import 'dart:math' as math;
 import 'package:aabapay_app/models/priority.dart';
@@ -55,7 +56,12 @@ class _TransactionState extends State<Transaction>
           gst: 0,
           total: 0),
       settlementDatetime: '',
-      settlementDescription: '');
+      settlementDescription: '',
+      currentDate: '',
+      currentTime: '',
+      setPriorityTime: '',
+      reducedDate: '',
+      reducedTime: '');
 
   @override
   void initState() {
@@ -385,7 +391,12 @@ class _TransactionState extends State<Transaction>
                                                   gst: 0,
                                                   total: 0),
                                               settlementDatetime: '',
-                                              settlementDescription: '');
+                                              settlementDescription: '',
+                                              currentDate: '',
+                                              currentTime: '',
+                                              setPriorityTime: '',
+                                              reducedDate: '',
+                                              reducedTime: '');
                                         });
                                         confirmBox(context, order, priorities);
                                       },
@@ -492,13 +503,101 @@ class _TransactionState extends State<Transaction>
               child: Text('Select Priority'),
             ),
           );
+          // print(
+          //     "delte this later  :id :${priorities.first.id},${priorities.first.name},prioroityTIme:${priorities.first.setPriorityTime} ,${priorities.first.currentDate}:${priorities.first.currentTime},date :${priorities.first.settlementDatetime}");
+          int i = 0;
           for (Priority priority in priorities) {
+            var remainingDays;
+            var remainingHours;
+            var remainingMinutes;
+            var remainingSecs;
+
+            Duration? totalDurationCounter;
+            if (priority.currentDate.isNotEmpty &&
+                priority.currentTime.isNotEmpty &&
+                priority.reducedDate.isNotEmpty &&
+                priority.reducedTime.isNotEmpty) {
+              var currentDateTIme = DateTime.parse(
+                  "${priority.currentDate} ${priority.currentTime}");
+              var reducedDateTIme = DateTime.parse(
+                  "${priority.reducedDate} ${priority.reducedTime}");
+
+              var differenceBetwweenDatesInSeconds =
+                  (reducedDateTIme.difference(currentDateTIme)).inSeconds;
+              int days = differenceBetwweenDatesInSeconds ~/ (24 * 60);
+              remainingDays =
+                  (reducedDateTIme.difference(currentDateTIme)).inDays;
+              // Step 2: Calculate the remaining hours
+              int remainingSeconds =
+                  differenceBetwweenDatesInSeconds % (24 * 60 * 60);
+              remainingHours = remainingSeconds ~/ (60 * 60);
+
+              // Step 3: Calculate the remaining minutes and seconds
+              remainingSeconds %= (60 * 60);
+              remainingMinutes = remainingSeconds ~/ 60;
+              remainingSecs = remainingSeconds % 60;
+
+              // print(
+              //     "caluculated values of time is $i :day: $remainingDays,hour : $remainingHours,mins:$remainingMinutes,secs:$remainingSecs");
+              // print(
+              //     "will active in :days:$remainingDays,hour:$remainingHours,,mins:$remainingMinutes");
+
+              totalDurationCounter = Duration(
+                days: remainingDays,
+                hours: remainingHours,
+                minutes: remainingMinutes,
+                seconds: remainingSecs,
+              );
+            }
+
             priorityItems.add(
               DropdownMenuItem(
+                enabled: priority.setPriorityTime.isNotEmpty ? false : true,
                 value: priority.id,
-                child: Text(priority.name),
+                child: Row(
+                  children: [
+                    Text(priority.name),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    priority.setPriorityTime.isNotEmpty
+                        ? Container(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Row(
+                              children: [
+                                Text("Active in"),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                FittedBox(
+                                  child: TimerCountdown(
+                                    spacerWidth: 3,
+                                    enableDescriptions: false,
+                                    format: CountDownTimerFormat
+                                        .daysHoursMinutesSeconds,
+                                    endTime: DateTime.parse(
+                                            "${priority.currentDate} ${priority.currentTime}")
+                                        .add(totalDurationCounter!),
+                                    // widgetBuilder: (_, CurrentRemainingTime time) {
+                                    //   return Text(
+                                    //     "Active in ${time.days} days ${time.hours} hours ${time.min} mins ${time.sec} secs",
+                                    //     maxLines: 2,
+                                    //   );
+                                    // },
+                                    onEnd: () {
+                                      print("Timer finished");
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : SizedBox()
+                  ],
+                ),
               ),
             );
+            i++;
           }
 
           return Container(
@@ -534,7 +633,12 @@ class _TransactionState extends State<Transaction>
                                 gst: 0,
                                 total: 0),
                             settlementDatetime: '',
-                            settlementDescription: '');
+                            settlementDescription: '',
+                            currentDate: '',
+                            currentTime: '',
+                            setPriorityTime: '',
+                            reducedDate: '',
+                            reducedTime: '');
                       });
                     }
                   }, ''),

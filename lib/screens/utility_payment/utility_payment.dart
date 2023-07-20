@@ -511,7 +511,7 @@ class _UtilityPaymentState extends State<UtilityPayment> {
   ) {
     List<ElevatedButton> priorityButtons = [];
     for (Priority priority in priorities) {
-      // ignore: unrelated_type_equality_checks
+      // ignore: unrelated_type_equal ity_checks
       if (priorityId == 0) {
         priorityId = priority.id;
       }

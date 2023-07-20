@@ -55,6 +55,9 @@ class TransactionApi {
 
     if (response.body != null) {
       var jsonResponse = jsonDecode(response.body);
+      // print(
+      //     "response of transaction prirites  : Delete this later : ${response.body}");
+      print("----->  $jsonResponse");
       return jsonResponse;
     } else {
       return {};
@@ -89,6 +92,7 @@ class TransactionApi {
 
     if (response.body != null) {
       var jsonResponse = jsonDecode(response.body);
+      print("----->  $jsonResponse");
       return jsonResponse;
     } else {
       return {};

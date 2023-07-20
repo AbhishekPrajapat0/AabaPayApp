@@ -145,6 +145,9 @@ class _PaymentOptionsState extends State<PaymentOptions> {
       orderId = state.orderId;
       currency = state.currency;
       userMobile = state.userMobile;
+
+
+      print("paymentGatewayKey --> $paymentGatewayKey");
     }
 
     return SafeArea(
@@ -517,6 +520,10 @@ class _PaymentOptionsState extends State<PaymentOptions> {
 
   void openCheckout(String paymentGatewayKey, int amount, String orderId,
       String currency, String userMobile) {
+    print("paymentGatewayKey --> $paymentGatewayKey");
+
+    // var dat = "rzp_test_mcvit8v2SJoR1z";
+
     var options = {
       "key": paymentGatewayKey,
       "amount": amount,

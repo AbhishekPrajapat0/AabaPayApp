@@ -13,20 +13,29 @@ class Priority {
   final Calculation calculation;
   final String settlementDatetime;
   final String settlementDescription;
+  final String currentDate;
+  final String currentTime;
+  final String setPriorityTime;
+  final String reducedDate;
+  final String reducedTime;
 
-  Priority({
-    required this.id,
-    required this.name,
-    required this.charge,
-    required this.smallDescription,
-    required this.smallDescriptionFinal,
-    required this.bigDescription,
-    required this.bigDescriptionFinal,
-    required this.status,
-    required this.calculation,
-    required this.settlementDatetime,
-    required this.settlementDescription,
-  });
+  Priority(
+      {required this.id,
+      required this.name,
+      required this.charge,
+      required this.smallDescription,
+      required this.smallDescriptionFinal,
+      required this.bigDescription,
+      required this.bigDescriptionFinal,
+      required this.status,
+      required this.calculation,
+      required this.settlementDatetime,
+      required this.settlementDescription,
+      required this.currentDate,
+      required this.currentTime,
+      required this.setPriorityTime,
+      required this.reducedDate,
+      required this.reducedTime});
 
   factory Priority.fromJson(Map<String, dynamic> json) {
     Calculation calculationObj = Calculation(
@@ -60,17 +69,21 @@ class Priority {
     }
 
     return Priority(
-      id: json['id'],
-      name: json['name'],
-      charge: json['charge'].toDouble(),
-      smallDescription: json['small_description'],
-      smallDescriptionFinal: small_description_final,
-      bigDescription: json['big_description'],
-      bigDescriptionFinal: big_description_final,
-      status: json['status'],
-      calculation: calculationObj,
-      settlementDatetime: settlementDatetime,
-      settlementDescription: settlementDescription,
-    );
+        id: json['id'],
+        name: json['name'],
+        charge: json['charge'].toDouble(),
+        smallDescription: json['small_description'],
+        smallDescriptionFinal: small_description_final,
+        bigDescription: json['big_description'],
+        bigDescriptionFinal: big_description_final,
+        status: json['status'],
+        calculation: calculationObj,
+        settlementDatetime: settlementDatetime,
+        settlementDescription: settlementDescription,
+        currentDate: json["current_date"] ?? "",
+        currentTime: json["current_time"] ?? "",
+        setPriorityTime: json["set_priority_time"] ?? "",
+        reducedDate: json["reducedDate"] ?? "",
+        reducedTime: json['reducedTime'] ?? "");
   }
 }

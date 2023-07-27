@@ -162,6 +162,7 @@ class _TransactionState extends State<Transaction>
         //   showChangePriority = false;
         // });
       }
+
       return Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -367,61 +368,68 @@ class _TransactionState extends State<Transaction>
                             ),
                             Expanded(
                                 flex: 2,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 0),
-                                  child: Center(
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          priorityId = 0;
-                                          priority = Priority(
-                                              id: 0,
-                                              name: '',
-                                              charge: 0,
-                                              smallDescription: '',
-                                              smallDescriptionFinal: '',
-                                              bigDescription: '',
-                                              bigDescriptionFinal: '',
-                                              status: '',
-                                              calculation: Calculation(
-                                                  transactionAmount: 0,
-                                                  receivableAmount: 0,
-                                                  convenienceCharges: 0,
-                                                  gst: 0,
-                                                  total: 0),
-                                              settlementDatetime: '',
-                                              settlementDescription: '',
-                                              currentDate: '',
-                                              currentTime: '',
-                                              setPriorityTime: '',
-                                              reducedDate: '',
-                                              reducedTime: '');
-                                        });
-                                        confirmBox(context, order, priorities);
-                                      },
-                                      child: Container(
-                                          height: 25,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            border: Border.all(
-                                                color: lightPrimaryColor),
+                                child: order.status.trim() == "PROCESSING" ||
+                                        order.status.trim() == "PENDING"
+                                    ? Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5, vertical: 0),
+                                        child: Center(
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                priorityId = 0;
+                                                priority = Priority(
+                                                    id: 0,
+                                                    name: '',
+                                                    charge: 0,
+                                                    smallDescription: '',
+                                                    smallDescriptionFinal: '',
+                                                    bigDescription: '',
+                                                    bigDescriptionFinal: '',
+                                                    status: '',
+                                                    calculation: Calculation(
+                                                        transactionAmount: 0,
+                                                        receivableAmount: 0,
+                                                        convenienceCharges: 0,
+                                                        gst: 0,
+                                                        total: 0),
+                                                    settlementDatetime: '',
+                                                    settlementDescription: '',
+                                                    currentDate: '',
+                                                    currentTime: '',
+                                                    setPriorityTime: '',
+                                                    reducedDate: '',
+                                                    reducedTime: '');
+                                              });
+                                              confirmBox(
+                                                  context, order, priorities);
+                                            },
+                                            child: Container(
+                                                height: 25,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  border: Border.all(
+                                                      color: lightPrimaryColor),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    'Change',
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        color:
+                                                            lightPrimaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                )),
                                           ),
-                                          child: Center(
-                                            child: Text(
-                                              'Change',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: lightPrimaryColor,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          )),
-                                    ),
-                                  ),
-                                ))
+                                        ),
+                                      )
+                                    : const SizedBox())
                           ]),
                     ],
                   )
@@ -503,8 +511,6 @@ class _TransactionState extends State<Transaction>
               child: Text('Select Priority'),
             ),
           );
-          // print(
-          //     "delte this later  :id :${priorities.first.id},${priorities.first.name},prioroityTIme:${priorities.first.setPriorityTime} ,${priorities.first.currentDate}:${priorities.first.currentTime},date :${priorities.first.settlementDatetime}");
           int i = 0;
           for (Priority priority in priorities) {
             var remainingDays;
@@ -556,10 +562,15 @@ class _TransactionState extends State<Transaction>
                 value: priority.id,
                 child: Row(
                   children: [
-                    Text(priority.name),
-                    SizedBox(
-                      width: 15,
-                    ),
+                    Container(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.15),
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              priority.name,
+                              maxLines: 7,
+                            ))),
                     priority.setPriorityTime.isNotEmpty
                         ? Container(
                             width: MediaQuery.of(context).size.width * 0.5,
@@ -572,18 +583,23 @@ class _TransactionState extends State<Transaction>
                                 FittedBox(
                                   child: TimerCountdown(
                                     spacerWidth: 3,
-                                    enableDescriptions: false,
+                                    enableDescriptions: true,
+                                    timeTextStyle: TextStyle(
+                                        color: lightPrimaryColor,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
                                     format: CountDownTimerFormat
                                         .daysHoursMinutesSeconds,
                                     endTime: DateTime.parse(
                                             "${priority.currentDate} ${priority.currentTime}")
                                         .add(totalDurationCounter!),
-                                    // widgetBuilder: (_, CurrentRemainingTime time) {
-                                    //   return Text(
-                                    //     "Active in ${time.days} days ${time.hours} hours ${time.min} mins ${time.sec} secs",
-                                    //     maxLines: 2,
-                                    //   );
-                                    // },
+                                    daysDescription: "Days",
+                                    hoursDescription: "HH",
+                                    minutesDescription: "MM",
+                                    secondsDescription: "SS",
+                                    descriptionTextStyle: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w300),
                                     onEnd: () {
                                       print("Timer finished");
                                     },

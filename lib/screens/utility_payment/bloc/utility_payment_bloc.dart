@@ -24,7 +24,7 @@ class UtilityPaymentBloc
         List<Priority> priorities = List<Priority>.from(
                 value['priorities'].map((model) => Priority.fromJson(model)))
             .toList();
-        print("----->  ${priorities[0].name}");
+        // print("----->  ${priorities[0].name}");
 
         Beneficiary beneficiary = Beneficiary(
           id: 0,

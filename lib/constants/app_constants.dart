@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppConstants {
   /* API Url*/
-  static final String ENV_DEV_URL = "https://aabapay.com/";
+  static final String ENV_DEV_URL = "https://aabapay.com/api/";
 
   static final String TERMS_URL = 'https://aabapay.com/terms-of-service';
   static final String PRIVACY_URL = 'https://aabapay.com/privacy-policy';

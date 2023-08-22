@@ -625,7 +625,7 @@ packages:
     source: hosted
     version: "6.0.3"
   razorpay_flutter:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: razorpay_flutter
       sha256: d73a536032f6939f0a6706cff958904d471eb1acb3dc957c8cc4e1628f0fbc28

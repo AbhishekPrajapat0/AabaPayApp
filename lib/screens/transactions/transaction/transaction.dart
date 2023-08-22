@@ -512,13 +512,21 @@ class _TransactionState extends State<Transaction>
             ),
           );
           int i = 0;
+
           for (Priority priority in priorities) {
             var remainingDays;
             var remainingHours;
             var remainingMinutes;
             var remainingSecs;
-
+            // print("Set PRRiority Time :${priority.setPriorityTime}");
+            // print("curr  Time :${priority.currentDate}");
+            // print("reduced Time :${priority.reducedTime}");
+            // print("reducedDate :${priority.reducedDate}");
+            //
             Duration? totalDurationCounter;
+            var allowShowTimer = true;
+
+            //
             if (priority.currentDate.isNotEmpty &&
                 priority.currentTime.isNotEmpty &&
                 priority.reducedDate.isNotEmpty &&
@@ -530,6 +538,9 @@ class _TransactionState extends State<Transaction>
 
               var differenceBetwweenDatesInSeconds =
                   (reducedDateTIme.difference(currentDateTIme)).inSeconds;
+              // print("difference in secs-- :$differenceBetwweenDatesInSeconds");
+              // var showTimer =
+              //     differenceBetwweenDatesInSeconds <= 0 ? false : true;
               int days = differenceBetwweenDatesInSeconds ~/ (24 * 60);
               remainingDays =
                   (reducedDateTIme.difference(currentDateTIme)).inDays;
@@ -547,18 +558,28 @@ class _TransactionState extends State<Transaction>
               //     "caluculated values of time is $i :day: $remainingDays,hour : $remainingHours,mins:$remainingMinutes,secs:$remainingSecs");
               // print(
               //     "will active in :days:$remainingDays,hour:$remainingHours,,mins:$remainingMinutes");
-
+              allowShowTimer = differenceBetwweenDatesInSeconds > 0;
               totalDurationCounter = Duration(
                 days: remainingDays,
                 hours: remainingHours,
                 minutes: remainingMinutes,
                 seconds: remainingSecs,
               );
+              // print(
+              //     "currDaTETIME :${DateTime.parse('${priority.currentDate} ${priority.currentTime}')} and totaldurationCounter :${totalDurationCounter}}");
+              // print(
+              //     "${DateTime.parse('${priority.currentDate} ${priority.currentTime}').add(totalDurationCounter!)}\nRemaining days :$remainingDays    Remaining Mins :$remainingMinutes    Remaining SEconds : $remainingSecs  and counter : ${totalDurationCounter}");
+              //
+              // print(
+              //     "In priority ID :${priority.id}, todays DATETIME :${DateTime.parse('${priority.currentDate} ${priority.currentTime}')}  and totalDurationCounter :${totalDurationCounter.inMinutes}");
             }
+            // print("ORder id  :${order.id}");
 
             priorityItems.add(
               DropdownMenuItem(
-                enabled: priority.setPriorityTime.isNotEmpty ? false : true,
+                enabled: priority.setPriorityTime.isNotEmpty && allowShowTimer
+                    ? false
+                    : true,
                 value: priority.id,
                 child: Row(
                   children: [
@@ -571,7 +592,7 @@ class _TransactionState extends State<Transaction>
                               priority.name,
                               maxLines: 7,
                             ))),
-                    priority.setPriorityTime.isNotEmpty
+                    priority.setPriorityTime.isNotEmpty && allowShowTimer
                         ? Container(
                             width: MediaQuery.of(context).size.width * 0.5,
                             child: Row(
